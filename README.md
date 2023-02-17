@@ -1,2 +1,219 @@
-# Complete_installation_of_X-UI_panel
-How to fully install the XUI panel. Get an SSL certificate for the domain. Install Google BBR. IR domains filter and Iran IPs filter to reduce the possibility of being filtered. Installing WordPress on the server.
+# Complete installation of X-UI panel
+- How to fully install the XUI panel.
+- Get an SSL certificate for the domain.
+- Install Google BBR.
+- IR domains filter and Iran IPs filter to reduce the possibility of being filtered.
+- Installing WordPress on the server.
+
+------------
+
+
+#  Install X-UI Panel
+
+#### server up to date:
+
+    apt update && apt upgrade -y
+
+
+#### Also install curl and socat:
+
+
+
+    apt install curl socat -y
+
+
+
+
+#### Download and install the Acme script for getting a free SSL certificate:
+
+
+
+    curl https://get.acme.sh | sh
+
+
+
+
+#### Set the default provider to Let’s Encrypt:
+
+
+
+    ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
+
+
+
+
+#### Register your account for a free SSL certificate:
+
+
+
+    ~/.acme.sh/acme.sh --register-account -m name@gmail.com
+
+
+
+
+### Obtain an SSL certificate:
+
+
+
+    ~/.acme.sh/acme.sh --issue -d sub.host.top --standalone
+
+
+
+
+#### Therefore install the certificate and key to a permanent location:
+
+
+
+    ~/.acme.sh/acme.sh --installcert -d sub.host.top --key-file /root/private.key --fullchain-file /root/cert.crt
+
+
+
+
+### Run the X-UI Install Script:
+
+###### Chinese:
+
+
+    bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
+
+###### English & Persian:English & Persian:
+
+
+
+    bash <(curl -Ls https://raw.githubusercontent.com/NidukaAkalanka/x-ui-english/master/install.sh)
+
+###### Username: admin
+###### Password: admin
+###### Port: 54321
+
+
+
+
+### Install google BBR:
+
+###### type >  x-ui  > select 15 
+
+
+
+------------
+
+
+
+## Enable HTTPS on Panel:
+
+#### Panel settings:
+
+> Panel certificate public key file path: /root/cert.crt
+> Panel certificate key file path: /root/private.key
+
+
+
+
+## Routing (IR domains filter and Iran IPs filter to reduce the possibility of being filtered):
+
+ 
+
+    sudo -i
+    cd /usr/local/x-ui/bin
+    wget https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/iran.dat
+    wget https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
+
+
+
+
+### Replace the config in x-ui panel settings:
+
+```json
+{
+  "api": {
+    "services": [
+      "HandlerService",
+      "LoggerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 62789,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
+  "policy": {
+    "system": {
+      "statsInboundDownlink": true,
+      "statsInboundUplink": true
+    }
+  },
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      },
+      {
+        "ip": [
+          "geoip:private",
+          "geoip:ir"
+        ],
+        "outboundTag": "blocked",
+        "type": "field"
+      },
+      {
+        "outboundTag": "blocked",
+        "protocol": [
+          "bittorrent"
+        ],
+        "type": "field"
+      },
+      {
+        "outboundTag": "blocked",
+          "domain": [
+            "regexp:.*\\.ir$",
+            "ext:iran.dat:ir",
+            "ext:iran.dat:other",
+            "geosite:category-ir-gov",
+            "geosite:category-ir-news",
+            "geosite:category-ir-bank",
+            "geosite:category-ir-tech",
+            "geosite:category-ir-travel",
+            "geosite:category-ir-shopping",
+            "geosite:category-ir-insurance",
+            "geosite:category-ir-scholar",
+            "snapp", "digikala","tapsi", "blogfa", "bank", "sb24.com", "sheypoor.com", "tebyan.net", "beytoote.com", "telewebion.com", "Film2movie.ws", "Setare.com", "Filimo.com", "Torob.com", "Tgju.org", "Sarzamindownload.com", "downloadha.com", "P30download.com", "Sanjesh.org"
+          ],
+        "type": "field"
+      }
+    ]
+  },
+  "stats": {}
+}
+
+```
+
+------------
+
+
+
+## Install wordpress on ubunto:
+
