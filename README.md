@@ -1,5 +1,5 @@
 # Complete installation of X-UI panel
-- How to fully install the XUI panel.
+- How to fully install the X-UI panel.
 - Get an SSL certificate for the domain.
 - Install Google BBR.
 - IR domains filter and Iran IPs filter to reduce the possibility of being filtered.
