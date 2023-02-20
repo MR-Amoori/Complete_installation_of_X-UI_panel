@@ -347,4 +347,17 @@ nano wp-config.php
 ```
 https://server-ip-address-or-domain/wordpress
 ```
+-----------
+
+## Hide server IP
+
+```
+wget -N --no-check-certificate https://gitlab.com/rwkgyg/CFwarp/raw/main/CFwarp.sh && bash CFwarp.sh
+```
+
+> 1
+
+> 1
+
+> 3
 
