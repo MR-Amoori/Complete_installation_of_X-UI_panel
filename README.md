@@ -217,3 +217,121 @@
 
 ## Install wordpress on ubunto:
 
+###### Update & Upgrade Server : 
+
+``` 
+apt update -y && apt upgrade -y 
+```
+
+###### Install Apache : 
+
+```
+apt install apache2
+```
+
+###### Install MySQL : 
+
+```
+apt install mariadb-server mariadb-client
+```
+
+###### SecureMariaDB :
+
+```
+mysql_secure_installation
+```
+
+>Change Root Password : N
+
+>Remove anonymous users: Y
+
+>Disallow root login remotely: N
+
+>Remove test database: Y
+
+>Reload privilege table now? : Y
+
+
+###### Install PHP :
+
+```
+apt install php php-mysql
+```
+
+###### Create DataBase : 
+
+```
+mysql -u root -p
+```
+
+```
+CREATE DATABASE wordpress_db;
+```
+
+###### Create Database User:  
+
+```
+CREATE USER 'wp_user'@'localhost' IDENTIFIED BY 'password';
+```
+
+###### User Permissions : 
+
+```
+GRANT ALL ON wordpress_db.* TO 'wp_user'@'localhost' IDENTIFIED BY 'password';
+```
+
+###### Exit of Database : 
+
+```
+FLUSH PRIVILEGES;
+Exit;
+```
+
+###### Install WP CMS : 
+
+```
+cd /tmp && wget https://wordpress.org/latest.tar.gz
+```
+
+###### Unzip WP : 
+
+```
+tar -xvf latest.tar.gz
+```
+
+###### Change Dir of WP :  
+
+```
+cp -R wordpress /var/www/html/
+```
+
+###### Run to change the ownership : 
+
+```
+chown -R www-data:www-data /var/www/html/wordpress/
+```
+
+###### change permission to WP folder : 
+
+```
+chmod -R 755 /var/www/html/wordpress/
+```
+
+###### Create Upload Dir: 
+
+```
+mkdir /var/www/html/wordpress/wp-content/uploads
+```
+
+###### Change Permissions of Upload Folder: 
+
+```
+chown -R www-data:www-data /var/www/html/wordpress/wp-content/uploads/
+```
+
+###### Install WP by UI: 
+
+```
+https://server-ip-address-or-domain/wordpress
+```
+
