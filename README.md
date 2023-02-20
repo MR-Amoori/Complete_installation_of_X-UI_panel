@@ -329,6 +329,19 @@ mkdir /var/www/html/wordpress/wp-content/uploads
 chown -R www-data:www-data /var/www/html/wordpress/wp-content/uploads/
 ```
 
+###### Move the WordPress directory to /var/www/html and changes in the config file
+
+```
+cd / && cd /var/www/html
+rm index.html
+cd wordpress
+mv * /var/www/html
+cd ..
+rm -rf wordpress
+mv wp-config-sample.php wp-config.php
+nano wp-config.php
+```
+
 ###### Install WP by UI: 
 
 ```
