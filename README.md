@@ -226,13 +226,13 @@ apt update -y && apt upgrade -y
 ###### Install Apache : 
 
 ```
-apt install apache2
+apt install apache2 -y
 ```
 
 ###### Install MySQL : 
 
 ```
-apt install mariadb-server mariadb-client
+apt install mariadb-server mariadb-client -y
 ```
 
 ###### SecureMariaDB :
@@ -255,7 +255,7 @@ mysql_secure_installation
 ###### Install PHP :
 
 ```
-apt install php php-mysql
+apt install php php-mysql -y
 ```
 
 ###### Create DataBase : 
