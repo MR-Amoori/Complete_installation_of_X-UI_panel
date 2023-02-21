@@ -76,11 +76,13 @@
 
     bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
 
-###### English & Persian:English & Persian:
-
-
+###### English & Persian:
 
     bash <(curl -Ls https://raw.githubusercontent.com/NidukaAkalanka/x-ui-english/master/install.sh)
+    
+###### English & Persian (Update & Custom Version):
+    
+    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 
 ###### Username: admin
 ###### Password: admin
