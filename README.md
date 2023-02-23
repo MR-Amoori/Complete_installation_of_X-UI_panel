@@ -216,7 +216,11 @@
 ### Open the required ports and close the other ports
 
 ``` 
-ufw enable -y
+ufw enable
+``` 
+
+
+``` 
 ufw allow 22/tcp
 ufw allow 2053/tcp
 ufw allow 443/tcp
