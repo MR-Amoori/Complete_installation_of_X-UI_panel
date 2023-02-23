@@ -225,6 +225,7 @@ ufw allow 22/tcp
 ufw allow 2053/tcp
 ufw allow 443/tcp
 ufw allow 2087/tcp
+ufw status
 ```
 
 ------------
