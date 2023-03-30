@@ -3,6 +3,7 @@
 - [Get an SSL certificate for the domain.](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#download-and-install-the-acme-script-for-getting-a-free-ssl-certificate "Get an SSL certificate for the domain.")
 - [Install Google BBR.](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#install-google-bbr "Install Google BBR.")
 - [IR domains filter and Iran IPs filter to reduce the possibility of being filtered.](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#routing-ir-domains-filter-and-iran-ips-filter-to-reduce-the-possibility-of-being-filtered "IR domains filter and Iran IPs filter to reduce the possibility of being filtered.")
+- [Disable Google reCAPTCHA](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#disable-google-recaptcha- "Disable Google reCAPTCHA")
 - [Installing WordPress on the server.](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#install-wordpress-on-ubunto "Installing WordPress on the server.")
 
 ------------
