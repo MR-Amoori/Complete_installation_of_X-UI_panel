@@ -158,6 +158,12 @@
     }
   ],
   "policy": {
+    "levels": {
+      "0": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    },
     "system": {
       "statsInboundDownlink": true,
       "statsInboundUplink": true
@@ -293,6 +299,103 @@
 }
 
 ```
+
+### OR :
+
+
+```
+{
+  "log": {
+    "loglevel": "warning", 
+    "access": "./access.log"
+  },
+ 
+  "api": {
+    "services": [
+      "HandlerService",
+      "LoggerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 62789,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    },
+    "system": {
+      "statsInboundDownlink": true,
+      "statsInboundUplink": true
+    }
+  },
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      },
+      {
+        "ip": [
+          "geoip:private",
+          "geoip:ir"
+        ],
+        "outboundTag": "blocked",
+        "type": "field"
+      },
+      {
+        "outboundTag": "blocked",
+          "domain": [
+            "regexp:.*\\.ir$",
+            "ext:iran.dat:ir",
+            "ext:iran.dat:other",
+            "geosite:category-ir-gov",
+            "geosite:category-ir-news",
+            "geosite:category-ir-bank",
+            "geosite:category-ir-tech",
+            "geosite:category-ir-travel",
+            "geosite:category-ir-shopping",
+            "geosite:category-ir-insurance",
+            "geosite:category-ir-scholar",
+            "snapp", "digikala","tapsi", "blogfa", "bank", "sb24.com", "sheypoor.com", "tebyan.net", "beytoote.com", "telewebion.com", "Film2movie.ws", "Setare.com", "Filimo.com", "Torob.com", "Tgju.org", "Sarzamindownload.com", "downloadha.com", "P30download.com", "Sanjesh.org"
+          ],
+        "type": "field"
+      }
+    ]
+  },
+  "stats": {}
+}
+
+```
+
+
 ### Open the required ports and close the other ports
 
 ``` 
@@ -313,7 +416,18 @@ ufw status
 
 ------------
 
-
+## Disable Google reCAPTCHA :
+```
+curl -O https://raw.githubusercontent.com/jinwyp/one_click_script/master/install_kernel.sh && chmod +x ./install_kernel.sh && ./install_kernel.sh
+```
+``` 
+2
+12
+y
+y
+1
+```
+------------
 
 ## Install wordpress on ubunto:
 
