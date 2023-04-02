@@ -84,6 +84,10 @@
 ###### English & Persian (Update & Custom Version):
     
     bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+    
+###### English & Persian (ALIREZA01):
+
+    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh)
 
 ###### Username: admin
 ###### Password: admin
