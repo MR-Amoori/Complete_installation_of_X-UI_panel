@@ -112,7 +112,6 @@
 > Panel certificate public key file path: ' /root/cert.crt '
  Panel certificate key file path: ' /root/private.key '
 
-```
 
 
 ### Open the required ports and close the other ports
@@ -120,7 +119,6 @@
 ``` 
 ufw enable
 ```
-------------
 
 ``` 
 ufw allow 22/tcp
