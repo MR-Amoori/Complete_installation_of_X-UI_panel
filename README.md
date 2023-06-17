@@ -109,8 +109,8 @@
 
 #### Panel settings:
 
-> Panel certificate public key file path: ' /root/cert.crt '
- Panel certificate key file path: ' /root/private.key '
+> Panel certificate public key file path: ' ``` /root/cert.crt ' ```
+ Panel certificate key file path: ' ``` /root/private.key ``` '
 
 
 
