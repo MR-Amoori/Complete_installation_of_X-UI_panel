@@ -1,294 +1,436 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-UI Panel Installer - Interactive Guide</title>
+    <title>پورتال جامع پنل X-UI | X-UI Panel Portal</title>
+     <link rel="icon" href="https://mramoori.ir/images/Avatar.jpg" type="image/x-icon">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Slate & Amber -->
-    <!-- Application Structure Plan: A single-page, scrolling layout designed to function like a product landing page. The structure prioritizes immediate action and clarity. 1. Hero section with the primary installation command and a copy button. 2. A visual 'Features' section with interactive cards. 3. An interactive 'Terminal Simulator' to demonstrate commands. This structure is chosen to guide the user from "what is this?" to "how do I use it?" and finally to "let me see it work" in a fluid, engaging manner. A language toggle ensures bilingual accessibility. -->
-    <!-- Visualization & Content Choices: The core content (installation command & features) is transformed from a linear README into interactive components. Main Command (Goal: Action): A styled code block with a one-click copy button (HTML/JS). Features (Goal: Organize/Inform): A grid of cards with icons and descriptions (HTML/Tailwind); clicking a card triggers the terminal (JS). Terminal Simulator (Goal: Demonstrate/Engage): A fake terminal UI that "types" commands and shows simulated output (JS). This provides a safe, visual way to understand the script's behavior. NO SVG/Mermaid used. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', 'Vazirmatn', sans-serif; scroll-behavior: smooth; }
-        #app-container.rtl { direction: rtl; }
-        .terminal-cursor {
-            display: inline-block;
-            background-color: #f59e0b; /* amber-500 */
-            width: 10px;
-            height: 1.2em;
-            animation: blink 1s step-end infinite;
+        :root {
+            --font-fa: 'Vazirmatn', sans-serif;
+            --font-en: 'Roboto', sans-serif;
+            --color-primary: #238636;
+            --color-primary-light: #2ea043;
+            --color-terminal-bg: #010409;
         }
-        @keyframes blink {
-            from, to { background-color: transparent; }
-            50% { background-color: #f59e0b; }
-        }
-        .rtl .space-x-4 > :not([hidden]) ~ :not([hidden]) { margin-right: 1rem; margin-left:0; }
-        .rtl .ml-auto { margin-right: auto; margin-left:0; }
+        html { scroll-behavior: smooth; }
+        body { background-color: #0d1117; color: #c9d1d9; }
+        .bg-pattern { background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0); background-size: 30px 30px; }
+        .font-fa { font-family: var(--font-fa); }
+        .font-en { font-family: var(--font-en); }
+        .glass-card { background: rgba(22, 27, 34, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
+        .fade-in-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+        .nav-link { position: relative; transition: color 0.3s; }
+        .nav-link.active, .nav-link:hover { color: var(--color-primary); }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--color-primary); transition: width .3s; }
+        .nav-link.active::after { width: 60%; }
+        details summary::-webkit-details-marker { display: none; }
+        .blinking-cursor { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800">
+<body class="bg-pattern antialiased">
 
-    <div id="app-container">
-        <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center space-x-4">
-                        <span class="text-2xl">⚡️</span>
-                        <h1 class="text-xl font-bold text-slate-700" data-content-key="headerTitle"></h1>
+    <!-- Header & Nav -->
+    <header class="sticky top-0 z-50 glass-card !rounded-none !border-x-0 !border-t-0">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="font-bold text-xl">
+                <a href="#hero" class="flex items-center gap-2">
+                    <i class="ph-terminal-window text-3xl text-[var(--color-primary)]"></i>
+                    <span data-translate="nav-brand"></span>
+                </a>
+            </div>
+            <div id="nav-menu" class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="nav-link" data-nav-id="features" data-translate="nav-features"></a>
+                <a href="#demo" class="nav-link" data-nav-id="demo" data-translate="nav-demo"></a>
+                <a href="#tutorial" class="nav-link" data-nav-id="tutorial" data-translate="nav-tutorial"></a>
+                <a href="#usage-guide" class="nav-link" data-nav-id="usage-guide" data-translate="nav-usage-guide"></a>
+                <a href="#commands" class="nav-link" data-nav-id="commands" data-translate="nav-commands"></a>
+                <a href="#security" class="nav-link" data-nav-id="security" data-translate="nav-security"></a>
+                <a href="#faq" class="nav-link" data-nav-id="faq" data-translate="nav-faq"></a>
+            </div>
+            <div class="flex items-center">
+                <div class="flex space-x-1 md:space-x-2 space-x-reverse rounded-lg border border-gray-700 p-1">
+                    <button id="lang-en" class="px-3 py-1 text-xs rounded-md transition-colors" data-lang="en">EN</button>
+                    <button id="lang-fa" class="px-3 py-1 text-xs rounded-md transition-colors" data-lang="fa">FA</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4">
+        <!-- Hero Section -->
+        <section id="hero" class="text-center min-h-[90vh] flex flex-col justify-center items-center py-24">
+            <div class="max-w-4xl mx-auto">
+                <i class="ph-rocket-launch text-8xl text-[var(--color-primary)]"></i>
+                <h1 data-translate="main-title" class="text-4xl md:text-6xl font-extrabold mt-4 leading-tight"></h1>
+                <p data-translate="main-subtitle" class="text-gray-400 mt-6 text-lg md:text-xl max-w-2xl mx-auto"></p>
+                <div class="mt-10">
+                    <a href="#commands" class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105" data-translate="hero-cta"></a>
+                </div>
+                 <!-- Auto-running Terminal -->
+                <div id="hero-terminal" class="max-w-2xl w-full mx-auto mt-12 glass-card rounded-lg overflow-hidden text-left fade-in-up">
+                    <div class="bg-gray-800 p-2 flex items-center">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+                            <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
+                            <span class="w-2.5 h-2.5 bg-green-500 rounded-full"></span>
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                         <a href="#features" class="hidden sm:block text-sm font-semibold text-slate-600 hover:text-amber-500 transition-colors" data-content-key="navFeatures"></a>
-                         <a href="https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel" target="_blank" class="hidden sm:block text-sm font-semibold text-slate-600 hover:text-amber-500 transition-colors mx-4" data-content-key="navGithub"></a>
-                        <button id="lang-toggle" class="p-2 rounded-md text-sm font-semibold text-slate-600 bg-slate-200 hover:bg-slate-300 transition-colors">
-                            <span data-content-key="langToggle"></span>
-                        </button>
+                    <div id="hero-terminal-output" class="p-4 h-40 overflow-hidden font-mono text-xs leading-relaxed" style="background-color: var(--color-terminal-bg);">
                     </div>
                 </div>
             </div>
-        </header>
+        </section>
 
-        <main>
-            <!-- Hero Section -->
-            <section class="text-center py-20 sm:py-24 lg:py-32 px-4 bg-white">
-                <div class="container mx-auto">
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900" data-content-key="heroTitle"></h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600" data-content-key="heroSubtitle"></p>
-                    <div class="mt-8 max-w-xl mx-auto">
-                        <p class="text-sm font-semibold text-slate-500 mb-2" data-content-key="heroCommandPrompt"></p>
-                        <div class="relative">
-                            <div class="bg-slate-900 text-left p-4 rounded-lg font-mono text-slate-300 text-sm sm:text-base overflow-x-auto">
-                                $<span id="install-command"></span>
-                            </div>
-                            <button id="copy-btn" class="absolute top-2 right-2 rtl:right-auto rtl:left-2 bg-slate-700 text-slate-300 hover:bg-slate-600 text-xs font-semibold py-1 px-2 rounded">
-                                <span data-content-key="copyButton"></span>
-                            </button>
-                        </div>
+        <!-- Features Section -->
+        <section id="features" class="py-24">
+            <h2 class="section-title" data-translate="features-title"></h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+        </section>
+
+        <!-- Terminal Demo Section -->
+        <section id="demo" class="py-24">
+            <h2 class="section-title" data-translate="demo-title"></h2>
+            <div class="max-w-4xl mx-auto glass-card rounded-2xl overflow-hidden fade-in-up">
+                <div class="bg-gray-800 p-3 flex items-center justify-between border-b border-gray-700">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
                     </div>
+                    <button id="run-simulation-btn" class="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-4 py-1 rounded-md text-sm transition-colors">
+                        <i class="ph-play"></i>
+                        <span data-translate="demo-run-sim"></span>
+                    </button>
                 </div>
-            </section>
-
-            <!-- Features Section -->
-            <section id="features" class="py-16 sm:py-20 lg:py-24 px-4">
-                <div class="container mx-auto text-center">
-                    <h3 class="text-3xl font-bold text-slate-900" data-content-key="featuresTitle"></h3>
-                    <p class="mt-3 max-w-xl mx-auto text-slate-600" data-content-key="featuresSubtitle"></p>
-                    <div id="features-grid" class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
-                        <!-- Feature cards will be injected here -->
-                    </div>
+                <div id="terminal-output" class="p-6 h-96 overflow-y-auto font-mono text-sm leading-relaxed" style="background-color: var(--color-terminal-bg);">
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Terminal Simulator Section -->
-            <section class="py-16 sm:py-20 lg:py-24 px-4 bg-white">
-                 <div class="container mx-auto text-center">
-                    <h3 class="text-3xl font-bold text-slate-900" data-content-key="terminalTitle"></h3>
-                    <p class="mt-3 max-w-xl mx-auto text-slate-600" data-content-key="terminalSubtitle"></p>
-                    <div class="mt-12 max-w-4xl mx-auto bg-slate-900 rounded-lg shadow-2xl overflow-hidden">
-                        <div class="bg-slate-800 h-8 flex items-center px-4 space-x-2">
-                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                            <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <div class="flex-grow text-center text-sm text-slate-400 font-mono" data-content-key="terminalWindowTitle"></div>
-                        </div>
-                        <div id="terminal-body" class="p-4 text-left font-mono text-sm h-80 overflow-y-auto text-white">
-                           <div id="terminal-output"></div>
-                           <div class="flex">
-                               <span class="text-emerald-400">user@vps:~$</span>
-                               <span id="terminal-input" class="flex-1 pl-2"></span>
-                               <span class="terminal-cursor"></span>
-                           </div>
-                        </div>
-                    </div>
-                 </div>
-            </section>
+        <!-- Tutorial Section -->
+        <section id="tutorial" class="py-24">
+            <h2 class="section-title" data-translate="tutorial-title"></h2>
+            <div class="max-w-4xl mx-auto space-y-8"></div>
+        </section>
 
-        </main>
-
-        <footer class="text-center py-8 px-4 border-t border-slate-200">
-            <p class="text-slate-600">
-                <span data-content-key="footerText"></span>
-                <a href="https://mramoori.ir" target="_blank" class="text-amber-600 hover:underline font-semibold">محمدرضا عموری</a>
-            </p>
-        </footer>
-    </div>
-
-    <script>
-        const content = {
-            en: {
-                headerTitle: "X-UI Installer",
-                navFeatures: "Features",
-                navGithub: "GitHub",
-                langToggle: "فارسی",
-                heroTitle: "The Easiest Way to Install X-UI Panel",
-                heroSubtitle: "A smart and complete script for installing and managing the X-UI panel. With just one command, install, update, and manage your panel effortlessly.",
-                heroCommandPrompt: "Copy and run this command in your server's terminal:",
-                installCommand: "bash <(curl -Ls https://raw.githubusercontent.com/Mr-Amoori/x-ui/main/install.sh)",
-                copyButton: "Copy",
-                copiedButton: "Copied!",
-                featuresTitle: "Powerful Features",
-                featuresSubtitle: "All the tools you need for comprehensive panel management, accessible through an interactive menu.",
-                features: [
-                    { id: 'install', icon: '🚀', name: 'Install', desc: 'A clean and standard installation of the latest version.' },
-                    { id: 'update', icon: '🔄', name: 'Update', desc: 'Update the panel to the newest version with one click.' },
-                    { id: 'uninstall', icon: '❌', name: 'Uninstall', desc: 'Completely remove the panel and its files.' },
-                    { id: 'status', icon: '📊', name: 'Check Status', desc: 'View the current status of the panel service.' },
-                    { id: 'logs', icon: '📄', name: 'Show Logs', desc: 'Display real-time logs for troubleshooting.' },
-                    { id: 'enable', icon: '✅', name: 'Enable Service', desc: 'Enable the panel service to start on boot.' },
-                    { id: 'disable', icon: '⛔️', name: 'Disable Service', desc: 'Disable the auto-start of the panel service.' },
-                    { id: 'port', icon: '🔌', name: 'Change Port', desc: 'Easily change the login port for the panel.' },
-                ],
-                terminalTitle: "Live Terminal Simulator",
-                terminalSubtitle: "Click on any feature card above to see how the command works in a simulated terminal environment.",
-                terminalWindowTitle: "bash - x-ui-installer",
-                footerText: "Script and Documentation by "
-            },
-            fa: {
-                headerTitle: "نصب کننده X-UI",
-                navFeatures: "قابلیت‌ها",
-                navGithub: "گیت‌هاب",
-                langToggle: "English",
-                heroTitle: "ساده‌ترین راه برای نصب پنل X-UI",
-                heroSubtitle: "یک اسکریپت هوشمند و کامل برای نصب و مدیریت پنل X-UI. تنها با یک دستور، پنل خود را به راحتی نصب، آپدیت و مدیریت کنید.",
-                heroCommandPrompt: "این دستور را کپی و در ترمینال سرور خود اجرا کنید:",
-                installCommand: "bash <(curl -Ls https://raw.githubusercontent.com/Mr-Amoori/x-ui/main/install.sh)",
-                copyButton: "کپی",
-                copiedButton: "کپی شد!",
-                featuresTitle: "ویژگی‌های قدرتمند",
-                featuresSubtitle: "تمام ابزارهای مورد نیاز شما برای مدیریت جامع پنل، که از طریق یک منوی تعاملی در دسترس است.",
-                features: [
-                    { id: 'install', icon: '🚀', name: 'نصب', desc: 'نصب تمیز و استاندارد آخرین نسخه پنل.' },
-                    { id: 'update', icon: '🔄', name: 'بروزرسانی', desc: 'ارتقاء پنل به جدیدترین نسخه با یک کلیک.' },
-                    { id: 'uninstall', icon: '❌', name: 'حذف', desc: 'حذف کامل پنل و فایل‌های مربوط به آن.' },
-                    { id: 'status', icon: '📊', name: 'بررسی وضعیت', desc: 'مشاهده وضعیت فعلی سرویس پنل.' },
-                    { id: 'logs', icon: '📄', name: 'نمایش لاگ‌ها', desc: 'نمایش لاگ‌های زنده برای عیب‌یابی.' },
-                    { id: 'enable', icon: '✅', name: 'فعال‌سازی سرویس', desc: 'فعال کردن سرویس پنل برای اجرا در بوت.' },
-                    { id: 'disable', icon: '⛔️', name: 'غیرفعال‌سازی سرویس', desc: 'غیرفعال کردن اجرای خودکار سرویس پنل.' },
-                    { id: 'port', icon: '🔌', name: 'تغییر پورت', desc: 'تغییر پورت ورود به پنل به سادگی.' },
-                ],
-                terminalTitle: "شبیه‌ساز زنده ترمینال",
-                terminalSubtitle: "روی هر یک از کارت‌های ویژگی در بالا کلیک کنید تا نحوه عملکرد دستور آن را در یک محیط ترمینال شبیه‌سازی شده ببینید.",
-                terminalWindowTitle: "bash - x-ui-installer",
-                footerText: "اسکریپت و مستندات توسط "
-            }
-        };
-
-        const terminalOutputs = {
-            en: {
-                welcome: `Welcome to the X-UI Panel Installer Script!\nSelect an option from the menu by clicking a card above.\n`,
-                install: `Executing: Install Panel\n[INFO] Downloading latest X-UI version...\n[INFO] Extracting files...\n[INFO] Setting up systemd service...\n[SUCCESS] X-UI panel installed successfully!\nAccess your panel at http://YOUR_IP:PORT`,
-                update: `Executing: Update Panel\n[INFO] Checking for new version...\n[INFO] New version found! Downloading...\n[SUCCESS] Panel updated to the latest version. Please restart the service.`,
-                uninstall: `Executing: Uninstall Panel\n[WARN] This will remove all X-UI data. Are you sure? (Simulated 'yes')\n[INFO] Stopping service...\n[INFO] Removing files...\n[SUCCESS] X-UI panel has been uninstalled.`,
-                status: `Executing: Check Status\n● x-ui.service - X-UI Panel Service\n   Loaded: loaded (/etc/systemd/system/x-ui.service; enabled)\n   Active: active (running) since Mon 2024-10-21 15:03:21 UTC; 5s ago`,
-                logs: `Executing: Show Logs\n-- Logs begin at Mon 2024-10-21 15:03:21 UTC. --\nINFO[2024-10-21 15:03:21] X-UI started\nINFO[2024-10-21 15:03:22] Web listen: 0.0.0.0:54321`,
-                enable: `Executing: Enable Service\n[INFO] Created symlink /etc/systemd/system/multi-user.target.wants/x-ui.service → /etc/systemd/system/x-ui.service.\n[SUCCESS] X-UI service enabled. It will now start on boot.`,
-                disable: `Executing: Disable Service\n[INFO] Removed /etc/systemd/system/multi-user.target.wants/x-ui.service.\n[SUCCESS] X-UI service disabled. It will no longer start on boot.`,
-                port: `Executing: Change Port\n[INFO] Please enter the new port number (simulated '2053').\n[SUCCESS] Port changed to 2053. Please restart the panel.`
-            },
-            fa: {
-                welcome: `به اسکریپت نصب پنل X-UI خوش آمدید!\nبا کلیک کردن روی یک کارت در بالا، گزینه‌ای را از منو انتخاب کنید.\n`,
-                install: `در حال اجرا: نصب پنل\n[اطلاعات] در حال دانلود آخرین نسخه X-UI...\n[اطلاعات] در حال استخراج فایل‌ها...\n[اطلاعات] در حال راه‌اندازی سرویس systemd...\n[موفقیت] پنل X-UI با موفقیت نصب شد!\nبه پنل خود در آدرس http://YOUR_IP:PORT دسترسی پیدا کنید`,
-                update: `در حال اجرا: بروزرسانی پنل\n[اطلاعات] در حال بررسی برای نسخه جدید...\n[اطلاعات] نسخه جدید یافت شد! در حال دانلود...\n[موفقیت] پنل به آخرین نسخه بروزرسانی شد. لطفاً سرویس را مجدداً راه‌اندازی کنید.`,
-                uninstall: `در حال اجرا: حذف پنل\n[هشدار] این عمل تمام داده‌های X-UI را حذف می‌کند. آیا مطمئن هستید؟ (پاسخ 'بله' شبیه‌سازی شد)\n[اطلاعات] در حال متوقف کردن سرویس...\n[اطلاعات] در حال حذف فایل‌ها...\n[موفقیت] پنل X-UI حذف شد.`,
-                status: `در حال اجرا: بررسی وضعیت\n● x-ui.service - سرویس پنل X-UI\n   Loaded: loaded (/etc/systemd/system/x-ui.service; enabled)\n   Active: active (running) since Mon 2024-10-21 15:03:21 UTC; 5s ago`,
-                logs: `در حال اجرا: نمایش لاگ‌ها\n-- لاگ‌ها از تاریخ Mon 2024-10-21 15:03:21 UTC آغاز می‌شود. --\nINFO[2024-10-21 15:03:21] X-UI started\nINFO[2024-10-21 15:03:22] Web listen: 0.0.0.0:54321`,
-                enable: `در حال اجرا: فعال‌سازی سرویس\n[اطلاعات] پیوند نمادین ایجاد شد /etc/systemd/system/multi-user.target.wants/x-ui.service → /etc/systemd/system/x-ui.service.\n[موفقیت] سرویس X-UI فعال شد. اکنون در هنگام بوت شدن اجرا می‌شود.`,
-                disable: `در حال اجرا: غیرفعال‌سازی سرویس\n[اطلاعات] حذف شد /etc/systemd/system/multi-user.target.wants/x-ui.service.\n[موفقیت] سرویس X-UI غیرفعال شد. دیگر در هنگام بوت شدن اجرا نخواهد شد.`,
-                port: `در حال اجرا: تغییر پورت\n[اطلاعات] لطفاً شماره پورت جدید را وارد کنید (مقدار '2053' شبیه‌سازی شد).\n[موفقیت] پورت به 2053 تغییر یافت. لطفاً پنل را مجدداً راه‌اندازی کنید.`
-            }
-        };
-
-        const appContainer = document.getElementById('app-container');
-        let currentLang = 'fa';
-        let isTyping = false;
-
-        function updateContent() {
-            const langContent = content[currentLang];
-            document.documentElement.lang = currentLang;
-            appContainer.className = currentLang === 'fa' ? 'rtl' : '';
-            
-            document.querySelectorAll('[data-content-key]').forEach(el => {
-                const key = el.getAttribute('data-content-key');
-                let value = langContent;
-                key.split('.').forEach(k => { value = value ? value[k] : ''; });
-                if(el.id === 'install-command'){
-                   el.textContent = content.en.installCommand; // Always show command in English
-                } else {
-                   el.textContent = value;
-                }
-            });
-
-            const featuresGrid = document.getElementById('features-grid');
-            featuresGrid.innerHTML = langContent.features.map(feature => `
-                <div class="feature-card bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer" data-feature-id="${feature.id}">
-                    <div class="text-3xl">${feature.icon}</div>
-                    <h4 class="mt-4 font-bold text-lg text-slate-900">${feature.name}</h4>
-                    <p class="mt-1 text-sm text-slate-600">${feature.desc}</p>
-                </div>
-            `).join('');
-            
-            typeInTerminal(terminalOutputs[currentLang].welcome, document.getElementById('terminal-output'), 20);
-        }
-
-        function typeInTerminal(text, element, speed) {
-            if (isTyping) return;
-            isTyping = true;
-            element.innerHTML = ''; 
-            const lines = text.split('\n');
-            let lineIndex = 0;
-            let charIndex = 0;
-            
-            function typeChar() {
-                if (lineIndex < lines.length) {
-                    if (charIndex < lines[lineIndex].length) {
-                        element.innerHTML += lines[lineIndex].charAt(charIndex);
-                        charIndex++;
-                        setTimeout(typeChar, speed);
-                    } else {
-                        element.innerHTML += '\n';
-                        lineIndex++;
-                        charIndex = 0;
-                        setTimeout(typeChar, speed);
-                    }
-                } else {
-                    isTyping = false;
-                }
-            }
-            typeChar();
-        }
-
-        document.getElementById('lang-toggle').addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'fa' : 'en';
-            updateContent();
-        });
+        <!-- Usage Guide Section -->
+        <section id="usage-guide" class="py-24">
+            <h2 class="section-title" data-translate="usage-guide-title"></h2>
+            <div class="max-w-4xl mx-auto space-y-8"></div>
+        </section>
         
-        document.getElementById('copy-btn').addEventListener('click', (e) => {
-            const command = content.en.installCommand;
-            navigator.clipboard.writeText(command).then(() => {
-                const btn = e.currentTarget;
-                const originalText = content[currentLang].copyButton;
-                btn.textContent = content[currentLang].copiedButton;
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 2000);
-            });
-        });
+        <!-- Commands Section -->
+        <section id="commands" class="py-24">
+            <h2 class="section-title" data-translate="commands-title"></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
+        </section>
 
-        document.getElementById('features-grid').addEventListener('click', e => {
-            const card = e.target.closest('.feature-card');
-            if (card && !isTyping) {
-                const featureId = card.dataset.featureId;
-                const outputText = terminalOutputs[currentLang][featureId];
-                if (outputText) {
-                   typeInTerminal(outputText, document.getElementById('terminal-output'), 20);
-                }
+        <!-- Security Section -->
+        <section id="security" class="py-24">
+            <h2 class="section-title" data-translate="security-title"></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-24">
+            <h2 class="section-title" data-translate="faq-title"></h2>
+            <div class="max-w-3xl mx-auto space-y-4"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center py-12 border-t border-gray-800">
+            <p id="footer-text" class="text-gray-500"></p>
+        </footer>
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white py-3 px-5 rounded-lg shadow-lg transition-all duration-300 transform translate-x-[calc(100%+20px)]">
+            <p id="toast-message"></p>
+        </div>
+    </main>
+    
+    <script>
+        const translations = {
+            fa: {
+                "nav-brand": "پورتال X-UI", "nav-features": "قابلیت‌ها", "nav-demo": "شبیه‌ساز نصب", "nav-tutorial": "آموزش", "nav-usage-guide": "راهنمای منو", "nav-commands": "دستورات", "nav-security": "امنیت", "nav-faq": "سوالات متداول",
+                "main-title": "پورتال جامع نصب و مدیریت پنل X-UI", "main-subtitle": "راهنمای کامل شما برای نصب، مدیریت و بهره‌برداری حداکثری از پنل قدرتمند X-UI.", "hero-cta": "مشاهده دستورات",
+                "features-title": "چرا پنل X-UI؟",
+                "feature1-title": "چند پروتکلی", "feature1-desc": "پشتیبانی کامل از Vmess, Vless, Trojan, Shadowsocks برای انعطاف‌پذیری بیشتر.",
+                "feature2-title": "رابط کاربری وب", "feature2-desc": "مدیریت آسان کاربران و تنظیمات از طریق یک پنل گرافیکی و کاربرپسند.",
+                "feature3-title": "نظارت بر ترافیک", "feature3-desc": "مشاهده دقیق میزان مصرف هر کاربر و نظارت زنده بر وضعیت سرور.",
+                "feature4-title": "پیکربندی آسان", "feature4-desc": "امکانات گسترده برای شخصی‌سازی تنظیمات سرور، کاربران و مسیرها.",
+                "demo-title": "شبیه‌ساز نصب در ترمینال", "demo-run-sim": "اجرای مجدد",
+                "hero-sim-logs": ["$ در حال اجرای اسکریپت نصب...", "[INFO] بررسی معماری سیستم...", "[OK] نصب وابستگی‌ها...", "[SUCCESS] پنل با موفقیت نصب شد!"],
+                "sim-logs": ["$ bash <(curl -Ls ...)", "[INFO] Checking machine architecture...", "[INFO] Architecture: x86_64", "[INFO] Updating package lists...", "[OK] Packages updated successfully.", "[INFO] Installing necessary dependencies (curl, socat)...", "[OK] Dependencies installed.", "[INFO] Downloading latest X-UI panel version...", "[OK] Download complete.", "[INFO] Installing X-UI panel...", "[INFO] Setting default credentials (admin/admin) and port (2053)...", "[SUCCESS] X-UI panel installed successfully!", "[INFO] To manage the panel, run 'x-ui' command.", "[INFO] You can now access the panel at: http://YOUR_SERVER_IP:2053"],
+                "tutorial-title": "راهنمای نصب گام به گام",
+                "step1-title": "قدم اول: تهیه سرور", "step1-desc": "یک سرور مجازی (VPS) با سیستم‌عامل Debian یا Ubuntu تهیه کنید. حداقل منابع: 1 هسته CPU, 512MB رم.",
+                "step2-title": "قدم دوم: اتصال به سرور", "step2-desc": "با استفاده از ترمینال و دستور SSH به سرور خود متصل شوید.",
+                "step3-title": "قدم سوم: اجرای اسکریپت", "step3-desc": "دستور نصب را کپی و در ترمینال اجرا کنید. اسکریپت همه چیز را خودکار انجام می‌دهد.",
+                "step4-title": "قدم چهارم: ورود و تنظیم", "step4-desc": "پس از نصب، با آدرس `http://YOUR_SERVER_IP:PORT` وارد پنل شوید. نام کاربری و رمز عبور پیش‌فرض `admin` است.",
+                "usage-guide-title": "راهنمای قدم به قدم استفاده از دستورات",
+                "usage1-title": "ورود به منوی مدیریت", "usage1-desc": "پس از نصب موفق، کافیست دستور `x-ui` را در ترمینال سرور خود وارد کرده و Enter را بزنید تا منوی گزینه‌ها نمایش داده شود.",
+                "usage2-title": "مدیریت کاربران و پورت", "usage2-desc": "از گزینه‌های اولیه منو برای تغییر نام کاربری، رمز عبور و پورت پنل استفاده کنید. این اولین قدم برای امن‌سازی پنل شماست.",
+                "usage3-title": "مشاهده وضعیت و لاگ‌ها", "usage3-desc": "از گزینه‌های 'وضعیت' برای اطمینان از اجرای صحیح پنل و از 'لاگ‌ها' برای عیب‌یابی مشکلات احتمالی کاربران یا اتصال استفاده کنید.",
+                "usage4-title": "بکاپ و ریستور", "usage4-desc": "به طور منظم از تنظیمات و کاربران خود با استفاده از گزینه بکاپ‌گیری نسخه پشتیبان تهیه کنید تا در صورت بروز مشکل، به راحتی آن را بازیابی نمایید.",
+                "commands-title": "دستورات اصلی و پیشرفته",
+                "install-title": "نصب / آپدیت", "install-desc": "برای نصب اولیه یا به‌روزرسانی پنل به آخرین نسخه.",
+                "manage-title": "منوی مدیریت", "manage-desc": "برای دسترسی به تنظیمات، تغییر پورت، مشاهده وضعیت و...",
+                "logs-title": "مشاهده لاگ‌ها", "logs-desc": "برای عیب‌یابی و مشاهده لاگ‌های پنل در لحظه.",
+                "restart-title": "ریستارت پنل", "restart-desc": "برای اعمال برخی تغییرات یا رفع مشکلات، پنل را ریستارت کنید.",
+                "security-title": "نکات کلیدی امنیت و بهترین شیوه‌ها",
+                "sec1-title": "تغییر اطلاعات ورود", "sec1-desc": "اولین و مهم‌ترین قدم، تغییر نام کاربری و رمز عبور پیش‌فرض پنل از طریق منوی `x-ui` است.",
+                "sec2-title": "فعال‌سازی فایروال", "sec2-desc": "فایروال سرور (مانند UFW) را فعال کرده و فقط پورت‌های ضروری (SSH, و پورت‌های پنل) را باز بگذارید.",
+                "sec3-title": "به‌روزرسانی منظم", "sec3-desc": "همیشه سیستم‌عامل سرور و خود پنل X-UI را با اجرای مجدد اسکریپت نصب، به‌روز نگه دارید.",
+                "faq-title": "پرسش‌های متداول",
+                "faq1-q": "چه توزیع‌هایی از لینوکس پشتیبانی می‌شوند؟", "faq1-a": "این اسکریپت برای توزیع‌های مبتنی بر دبیان مانند Debian و Ubuntu بهینه‌سازی شده است.",
+                "faq2-q": "چگونه پورت پنل را تغییر دهم؟", "faq2-a": "دستور `x-ui` را در ترمینال وارد کرده و گزینه مربوط به تغییر پورت را انتخاب کنید.",
+                "faq3-q": "آیا امکان بکاپ‌گیری وجود دارد؟", "faq3-a": "بله، از طریق منوی مدیریت (`x-ui`) می‌توانید از پایگاه داده و تنظیمات خود نسخه پشتیبان تهیه و بازیابی کنید.",
+                "copy-success": "با موفقیت کپی شد!", "copy-error": "خطا در کپی کردن!", "footer-text": "ارائه شده توسط"
+            },
+            en: {
+                "nav-brand": "X-UI Portal", "nav-features": "Features", "nav-demo": "Install Sim", "nav-tutorial": "Tutorial", "nav-usage-guide": "Menu Guide", "nav-commands": "Commands", "nav-security": "Security", "nav-faq": "FAQ",
+                "main-title": "Comprehensive X-UI Panel Installation & Management Portal", "main-subtitle": "Your complete guide to install, manage, and maximize the powerful X-UI panel.", "hero-cta": "View Commands",
+                "features-title": "Why X-UI Panel?",
+                "feature1-title": "Multi-Protocol", "feature1-desc": "Full support for Vmess, Vless, Trojan, and Shadowsocks for greater flexibility.",
+                "feature2-title": "Web UI", "feature2-desc": "Easily manage users and settings through a user-friendly graphical panel.",
+                "feature3-title": "Traffic Monitoring", "feature3-desc": "Accurately monitor each user's data consumption and server status in real-time.",
+                "feature4-title": "Easy Configuration", "feature4-desc": "Extensive options for customizing server, user, and routing settings.",
+                "demo-title": "Terminal Installation Simulator", "demo-run-sim": "Re-run Simulation",
+                "hero-sim-logs": ["$ Running installation script...", "[INFO] Checking system architecture...", "[OK] Installing dependencies...", "[SUCCESS] Panel installed successfully!"],
+                "sim-logs": ["$ bash <(curl -Ls ...)", "[INFO] Checking machine architecture...", "[INFO] Architecture: x86_64", "[INFO] Updating package lists...", "[OK] Packages updated successfully.", "[INFO] Installing necessary dependencies (curl, socat)...", "[OK] Dependencies installed.", "[INFO] Downloading latest X-UI panel version...", "[OK] Download complete.", "[INFO] Installing X-UI panel...", "[INFO] Setting default credentials (admin/admin) and port (2053)...", "[SUCCESS] X-UI panel installed successfully!", "[INFO] To manage the panel, run 'x-ui' command.", "[INFO] You can now access the panel at: http://YOUR_SERVER_IP:2053"],
+                "tutorial-title": "Step-by-Step Installation Guide",
+                "step1-title": "Step 1: Get a Server", "step1-desc": "Get a Virtual Private Server (VPS) with Debian or Ubuntu OS. Minimum specs: 1 CPU Core, 512MB RAM.",
+                "step2-title": "Step 2: Connect to Server", "step2-desc": "Connect to your server via SSH.",
+                "step3-title": "Step 3: Run the Script", "step3-desc": "Copy and paste the installation command into your terminal. It handles everything.",
+                "step4-title": "Step 4: Login and Configure", "step4-desc": "After installation, access the panel at `http://YOUR_SERVER_IP:PORT`. Default credentials are `admin`/`admin`.",
+                "usage-guide-title": "Step-by-Step Command Usage Guide",
+                "usage1-title": "Accessing the Menu", "usage1-desc": "After successful installation, simply type `x-ui` in your server's terminal and press Enter to bring up the options menu.",
+                "usage2-title": "Managing Port & Users", "usage2-desc": "Use the initial menu options to change the panel's port, username, and password. This is the first step to securing your panel.",
+                "usage3-title": "Checking Status & Logs", "usage3-desc": "Use the 'Status' option to ensure the panel is running correctly and 'Logs' to troubleshoot potential user or connection issues.",
+                "usage4-title": "Backup and Restore", "usage4-desc": "Regularly back up your settings and users via the backup option, so you can easily restore them if any problems arise.",
+                "commands-title": "Core & Advanced Commands",
+                "install-title": "Install / Update", "install-desc": "For initial installation or updating the panel to the latest version.",
+                "manage-title": "Management Menu", "manage-desc": "To access settings, change port, check status, and more.",
+                "logs-title": "View Logs", "logs-desc": "To troubleshoot and view real-time panel logs.",
+                "restart-title": "Restart Panel", "restart-desc": "To apply certain changes or fix issues, restart the panel.",
+                "security-title": "Security & Best Practices",
+                "sec1-title": "Change Credentials", "sec1-desc": "The first and most important step is to change the default username and password via the `x-ui` menu.",
+                "sec2-title": "Enable Firewall", "sec2-desc": "Enable the server's firewall (like UFW) and only allow necessary ports (SSH, panel ports).",
+                "sec3-title": "Update Regularly", "sec3-desc": "Always keep your server's OS and the X-UI panel itself updated by re-running the install script.",
+                "faq-title": "Frequently Asked Questions",
+                "faq1-q": "Which Linux distributions are supported?", "faq1-a": "This script is optimized for Debian-based distributions like Debian and Ubuntu.",
+                "faq2-q": "How can I change the panel's port?", "faq2-a": "Simply type `x-ui` in the terminal and choose the 'change port' option from the menu.",
+                "faq3-q": "Is it possible to back up settings?", "faq3-a": "Yes, through the management menu (`x-ui`), you can back up and restore your database and settings.",
+                "copy-success": "Copied successfully!", "copy-error": "Failed to copy!", "footer-text": "Provided by"
             }
-        });
+        };
 
-        updateContent();
+        const ui = {};
+        let currentLang = null;
+        let isSimRunning = false;
+        let heroSimTimeout;
+        
+        const templates = {
+            card: (icon, titleKey, descKey, t, extraClasses = '') => `<div class="glass-card p-6 rounded-xl text-center fade-in-up ${extraClasses}"><i class="ph-${icon} text-5xl text-[var(--color-primary)] mb-4 inline-block"></i><h3 class="text-xl font-bold mb-2">${t[titleKey]}</h3><p class="text-gray-400 text-sm">${t[descKey]}</p></div>`,
+            tutorialStep: (icon, step, titleKey, descKey, command, t) => `<div class="glass-card p-6 rounded-xl flex flex-col md:flex-row items-center gap-6 fade-in-up"><div class="flex-shrink-0"><div class="w-24 h-24 bg-gray-900 rounded-full flex flex-col items-center justify-center border-2 border-[var(--color-primary)]"><i class="ph-${icon} text-3xl text-[var(--color-primary)]"></i><span class="font-bold mt-1">${step}</span></div></div><div class="text-center md:text-inherit flex-1"><h3 class="text-2xl font-bold">${t[titleKey]}</h3><p class="text-gray-400 mt-2 mb-4">${t[descKey]}</p>${command?`<div class="relative bg-black rounded-lg p-4 text-left mt-2"><code class="font-mono text-gray-300 text-sm break-words">${command}</code><button class="copy-btn" title="${t['copy-success']}"><i class="ph-copy text-xl"></i></button></div>`:''}</div></div>`,
+            commandCard: (icon, titleKey, descKey, command, t) => `<div class="glass-card p-6 rounded-xl fade-in-up"><div class="flex items-center mb-3"><i class="ph-${icon} text-3xl text-[var(--color-primary)] ${currentLang==='fa'?'ml-3':'mr-3'}"></i><h3 class="text-2xl font-bold">${t[titleKey]}</h3></div><p class="text-gray-400 mb-4">${t[descKey]}</p><div class="relative bg-black rounded-lg p-4 text-left"><code class="font-mono text-gray-300 text-sm break-words">${command}</code><button class="copy-btn" title="${t['copy-success']}"><i class="ph-copy text-xl"></i></button></div></div>`,
+            faqItem: (qKey, aKey, t) => `<details class="glass-card p-5 rounded-lg cursor-pointer group fade-in-up"><summary class="font-semibold text-lg flex justify-between items-center">${t[qKey]}<i class="ph-caret-down text-xl transition-transform group-open:rotate-180"></i></summary><p class="text-gray-400 mt-4 pt-4 border-t border-gray-700 text-sm leading-relaxed">${t[aKey]}</p></details>`
+        };
+        
+        function setLanguage(lang) {
+            if (lang === currentLang) return;
+            currentLang = lang;
+            const t = translations[currentLang];
+
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+            document.body.classList.toggle('font-fa', lang === 'fa');
+            document.body.classList.toggle('font-en', lang === 'en');
+            ui.langFaBtn.classList.toggle('bg-[var(--color-primary)]', lang === 'fa');
+            ui.langEnBtn.classList.toggle('bg-[var(--color-primary)]', lang === 'en');
+
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                if(t[el.dataset.translate]) el.innerHTML = t[el.dataset.translate];
+            });
+            
+            ui.featuresGrid.innerHTML = [
+                templates.card('plugs', 'feature1-title', 'feature1-desc', t),
+                templates.card('gauge', 'feature2-title', 'feature2-desc', t, 'lg:!mt-8'),
+                templates.card('chart-bar', 'feature3-title', 'feature3-desc', t),
+                templates.card('gear-six', 'feature4-title', 'feature4-desc', t, 'lg:!mt-8')
+            ].join('');
+
+            const stepText = currentLang === 'fa' ? 'قدم' : 'Step';
+            ui.tutorialContainer.innerHTML = [
+                templates.tutorialStep('server', `${stepText} 1`, 'step1-title', 'step1-desc', null, t),
+                templates.tutorialStep('ssh', `${stepText} 2`, 'step2-title', 'step2-desc', 'ssh root@YOUR_SERVER_IP', t),
+                templates.tutorialStep('scroll', `${stepText} 3`, 'step3-title', 'step3-desc', 'bash &lt;(curl -Ls ...)', t),
+                templates.tutorialStep('key', `${stepText} 4`, 'step4-title', 'step4-desc', null, t)
+            ].join('');
+
+            const usageStepNumbers = lang === 'fa' ? ['۱', '۲', '۳', '۴'] : ['1', '2', '3', '4'];
+            ui.usageGuideContainer.innerHTML = [
+                 templates.tutorialStep('terminal', usageStepNumbers[0], 'usage1-title', 'usage1-desc', 'x-ui', t),
+                 templates.tutorialStep('user-gear', usageStepNumbers[1], 'usage2-title', 'usage2-desc', null, t),
+                 templates.tutorialStep('info', usageStepNumbers[2], 'usage3-title', 'usage3-desc', null, t),
+                 templates.tutorialStep('database', usageStepNumbers[3], 'usage4-title', 'usage4-desc', null, t)
+            ].join('');
+
+            ui.commandsGrid.innerHTML = [
+                templates.commandCard('download-simple', 'install-title', 'install-desc', 'bash &lt;(curl -Ls ...)', t),
+                templates.commandCard('list-checks', 'manage-title', 'manage-desc', 'x-ui', t),
+                templates.commandCard('terminal', 'logs-title', 'logs-desc', 'x-ui logs', t),
+                templates.commandCard('arrow-clockwise', 'restart-title', 'restart-desc', 'x-ui restart', t)
+            ].join('');
+            
+            ui.securityGrid.innerHTML = [
+                templates.card('key', 'sec1-title', 'sec1-desc', t),
+                templates.card('fire', 'sec2-title', 'sec2-desc', t),
+                templates.card('cloud-arrow-up', 'sec3-title', 'sec3-desc', t)
+            ].join('');
+
+            ui.faqContainer.innerHTML = [
+                templates.faqItem('faq1-q', 'faq1-a', t),
+                templates.faqItem('faq2-q', 'faq2-a', t),
+                templates.faqItem('faq3-q', 'faq3-a', t)
+            ].join('');
+            
+            const footerLinkText = currentLang === 'fa' ? 'محمدرضا عموری' : 'Mohammadreza Amoori';
+            ui.footerText.innerHTML = `${t["footer-text"]} <a href="https://github.com/MR-Amoori" target="_blank" class="font-semibold text-[var(--color-primary)] hover:underline">${footerLinkText}</a>`;
+            
+            runTerminalSimulation(true);
+        }
+
+        function handleCopyClick(e) {
+            const copyBtn = e.target.closest('.copy-btn');
+            if (!copyBtn) return;
+            const commandText = copyBtn.closest('.relative').querySelector('code').textContent.trim().replace('...', 'https://raw.githubusercontent.com/MR-Amoori/Complete_installation_of_X-UI_panel/master/install.sh');
+            navigator.clipboard.writeText(commandText).then(() => showToast(translations[currentLang]['copy-success'], 'success')).catch(() => showToast(translations[currentLang]['copy-error'], 'error'));
+        }
+
+        function runTerminalSimulation(isHero = false) {
+            const termOutput = isHero ? ui.heroTerminalOutput : ui.terminalOutput;
+            const logs = translations[currentLang][isHero ? 'hero-sim-logs' : 'sim-logs'];
+            const button = isHero ? null : ui.runSimBtn;
+
+            if (isHero) {
+                clearTimeout(heroSimTimeout);
+            } else {
+                 if (isSimRunning) return;
+                isSimRunning = true;
+                button.disabled = true;
+                button.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+           
+            termOutput.innerHTML = '';
+            let i = 0;
+
+            function typeLine() {
+                if (i >= logs.length) {
+                    if(!isHero) {
+                        termOutput.innerHTML += '<span class="blinking-cursor">_</span>';
+                        isSimRunning = false;
+                        button.disabled = false;
+                        button.classList.remove('opacity-50', 'cursor-not-allowed');
+                    } else {
+                         heroSimTimeout = setTimeout(() => runTerminalSimulation(true), 5000);
+                    }
+                    return;
+                }
+                const logText = logs[i];
+                const line = document.createElement('div');
+                let colorClass = 'text-gray-300';
+                if (logText.startsWith('$')) colorClass = 'text-gray-400';
+                if (logText.startsWith('[OK]')) colorClass = 'text-green-400';
+                if (logText.startsWith('[SUCCESS]')) colorClass = 'text-green-300 font-bold';
+                if (logText.startsWith('[INFO]') && logs.indexOf(logText) > logs.length - 3) colorClass = 'text-cyan-400';
+                line.className = `whitespace-pre-wrap ${colorClass}`;
+                line.textContent = logText;
+                termOutput.appendChild(line);
+                termOutput.scrollTop = termOutput.scrollHeight;
+                i++;
+                const timeout = isHero ? 1200 : (Math.random() * 200 + 100);
+                setTimeout(typeLine, timeout);
+            }
+            typeLine();
+        }
+
+        function showToast(message, type) {
+            ui.toastMessage.textContent = message;
+            ui.toast.className = `fixed bottom-5 right-5 text-white py-3 px-5 rounded-lg shadow-lg transition-all duration-300 transform translate-x-0 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+            setTimeout(() => ui.toast.classList.add('translate-x-[calc(100%+20px)]'), 3000);
+        }
+        
+        const animationObserver = new IntersectionObserver((entries) => entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                animationObserver.unobserve(entry.target);
+            }
+        }), { threshold: 0.1 });
+
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    const navLink = ui.navMenu.querySelector(`[data-nav-id=${entry.target.id}]`);
+                    if (navLink) {
+                        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                        navLink.classList.add('active');
+                    }
+                }
+            });
+        }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+
+        function init() {
+             Object.assign(ui, {
+                langFaBtn: document.getElementById('lang-fa'),
+                langEnBtn: document.getElementById('lang-en'),
+                navMenu: document.getElementById('nav-menu'),
+                toast: document.getElementById('toast'),
+                toastMessage: document.getElementById('toast-message'),
+                featuresGrid: document.querySelector('#features .grid'),
+                tutorialContainer: document.querySelector('#tutorial .space-y-8'),
+                usageGuideContainer: document.querySelector('#usage-guide .space-y-8'),
+                commandsGrid: document.querySelector('#commands .grid'),
+                securityGrid: document.querySelector('#security .grid'),
+                faqContainer: document.querySelector('#faq .space-y-4'),
+                footerText: document.getElementById('footer-text'),
+                allSections: document.querySelectorAll('main > section'),
+                terminalOutput: document.getElementById('terminal-output'),
+                heroTerminalOutput: document.getElementById('hero-terminal-output'),
+                runSimBtn: document.getElementById('run-simulation-btn')
+            });
+
+            ui.langFaBtn.addEventListener('click', () => setLanguage('fa'));
+            ui.langEnBtn.addEventListener('click', () => setLanguage('en'));
+            document.body.addEventListener('click', handleCopyClick);
+            ui.runSimBtn.addEventListener('click', () => runTerminalSimulation(false));
+            
+            setLanguage('fa');
+            
+            document.querySelectorAll('.section-title').forEach(h => h.classList.add('text-3xl', 'font-bold', 'text-center', 'mb-12', 'fade-in-up'));
+            document.querySelectorAll('.fade-in-up').forEach(el => animationObserver.observe(el));
+            ui.allSections.forEach(section => {
+                if(section) navObserver.observe(section);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
