@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پورتال جامع پنل X-UI | X-UI Panel Portal</title>
-     <link rel="icon" href="https://mramoori.ir/images/Avatar.jpg" type="image/x-icon">
-
+    <link rel="icon" href="https://mramoori.ir/images/Avatar.jpg" type="image/x-icon">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -80,21 +80,20 @@
                 <i class="ph-rocket-launch text-8xl text-[var(--color-primary)]"></i>
                 <h1 data-translate="main-title" class="text-4xl md:text-6xl font-extrabold mt-4 leading-tight"></h1>
                 <p data-translate="main-subtitle" class="text-gray-400 mt-6 text-lg md:text-xl max-w-2xl mx-auto"></p>
-                <div class="mt-10">
-                    <a href="#commands" class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105" data-translate="hero-cta"></a>
-                </div>
-                 <!-- Auto-running Terminal -->
-                <div id="hero-terminal" class="max-w-2xl w-full mx-auto mt-12 glass-card rounded-lg overflow-hidden text-left fade-in-up">
-                    <div class="bg-gray-800 p-2 flex items-center">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 bg-red-500 rounded-full"></span>
-                            <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
-                            <span class="w-2.5 h-2.5 bg-green-500 rounded-full"></span>
+                
+                 <!-- Main Install Command Block -->
+                <div class="mt-10 max-w-2xl mx-auto">
+                    <p class="text-sm font-semibold text-gray-400 mb-2" data-translate="hero-command-prompt"></p>
+                    <div class="relative">
+                        <div id="hero-command-container" class="bg-black text-left p-4 pr-16 md:pr-20 rounded-lg font-mono text-slate-300 text-sm sm:text-base overflow-x-auto">
+                            <!-- Command text will be inserted here -->
                         </div>
-                    </div>
-                    <div id="hero-terminal-output" class="p-4 h-40 overflow-hidden font-mono text-xs leading-relaxed" style="background-color: var(--color-terminal-bg);">
+                        <button id="hero-copy-btn" class="absolute top-1/2 -translate-y-1/2 right-3 rtl:right-auto rtl:left-3 bg-slate-700 text-slate-300 hover:bg-slate-600 p-2 rounded-md">
+                            <i class="ph-copy text-xl"></i>
+                        </button>
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -169,14 +168,13 @@
         const translations = {
             fa: {
                 "nav-brand": "پورتال X-UI", "nav-features": "قابلیت‌ها", "nav-demo": "شبیه‌ساز نصب", "nav-tutorial": "آموزش", "nav-usage-guide": "راهنمای منو", "nav-commands": "دستورات", "nav-security": "امنیت", "nav-faq": "سوالات متداول",
-                "main-title": "پورتال جامع نصب و مدیریت پنل X-UI", "main-subtitle": "راهنمای کامل شما برای نصب، مدیریت و بهره‌برداری حداکثری از پنل قدرتمند X-UI.", "hero-cta": "مشاهده دستورات",
+                "main-title": "پورتال جامع نصب و مدیریت پنل X-UI", "main-subtitle": "راهنمای کامل شما برای نصب، مدیریت و بهره‌برداری حداکثری از پنل قدرتمند X-UI.", "hero-command-prompt": "برای شروع، این دستور را در ترمینال سرور خود کپی و اجرا کنید:",
                 "features-title": "چرا پنل X-UI؟",
                 "feature1-title": "چند پروتکلی", "feature1-desc": "پشتیبانی کامل از Vmess, Vless, Trojan, Shadowsocks برای انعطاف‌پذیری بیشتر.",
                 "feature2-title": "رابط کاربری وب", "feature2-desc": "مدیریت آسان کاربران و تنظیمات از طریق یک پنل گرافیکی و کاربرپسند.",
                 "feature3-title": "نظارت بر ترافیک", "feature3-desc": "مشاهده دقیق میزان مصرف هر کاربر و نظارت زنده بر وضعیت سرور.",
                 "feature4-title": "پیکربندی آسان", "feature4-desc": "امکانات گسترده برای شخصی‌سازی تنظیمات سرور، کاربران و مسیرها.",
                 "demo-title": "شبیه‌ساز نصب در ترمینال", "demo-run-sim": "اجرای مجدد",
-                "hero-sim-logs": ["$ در حال اجرای اسکریپت نصب...", "[INFO] بررسی معماری سیستم...", "[OK] نصب وابستگی‌ها...", "[SUCCESS] پنل با موفقیت نصب شد!"],
                 "sim-logs": ["$ bash <(curl -Ls ...)", "[INFO] Checking machine architecture...", "[INFO] Architecture: x86_64", "[INFO] Updating package lists...", "[OK] Packages updated successfully.", "[INFO] Installing necessary dependencies (curl, socat)...", "[OK] Dependencies installed.", "[INFO] Downloading latest X-UI panel version...", "[OK] Download complete.", "[INFO] Installing X-UI panel...", "[INFO] Setting default credentials (admin/admin) and port (2053)...", "[SUCCESS] X-UI panel installed successfully!", "[INFO] To manage the panel, run 'x-ui' command.", "[INFO] You can now access the panel at: http://YOUR_SERVER_IP:2053"],
                 "tutorial-title": "راهنمای نصب گام به گام",
                 "step1-title": "قدم اول: تهیه سرور", "step1-desc": "یک سرور مجازی (VPS) با سیستم‌عامل Debian یا Ubuntu تهیه کنید. حداقل منابع: 1 هسته CPU, 512MB رم.",
@@ -205,14 +203,13 @@
             },
             en: {
                 "nav-brand": "X-UI Portal", "nav-features": "Features", "nav-demo": "Install Sim", "nav-tutorial": "Tutorial", "nav-usage-guide": "Menu Guide", "nav-commands": "Commands", "nav-security": "Security", "nav-faq": "FAQ",
-                "main-title": "Comprehensive X-UI Panel Installation & Management Portal", "main-subtitle": "Your complete guide to install, manage, and maximize the powerful X-UI panel.", "hero-cta": "View Commands",
+                "main-title": "Comprehensive X-UI Panel Installation & Management Portal", "main-subtitle": "Your complete guide to install, manage, and maximize the powerful X-UI panel.", "hero-command-prompt": "To get started, copy and run this command in your server's terminal:",
                 "features-title": "Why X-UI Panel?",
                 "feature1-title": "Multi-Protocol", "feature1-desc": "Full support for Vmess, Vless, Trojan, and Shadowsocks for greater flexibility.",
                 "feature2-title": "Web UI", "feature2-desc": "Easily manage users and settings through a user-friendly graphical panel.",
                 "feature3-title": "Traffic Monitoring", "feature3-desc": "Accurately monitor each user's data consumption and server status in real-time.",
                 "feature4-title": "Easy Configuration", "feature4-desc": "Extensive options for customizing server, user, and routing settings.",
                 "demo-title": "Terminal Installation Simulator", "demo-run-sim": "Re-run Simulation",
-                "hero-sim-logs": ["$ Running installation script...", "[INFO] Checking system architecture...", "[OK] Installing dependencies...", "[SUCCESS] Panel installed successfully!"],
                 "sim-logs": ["$ bash <(curl -Ls ...)", "[INFO] Checking machine architecture...", "[INFO] Architecture: x86_64", "[INFO] Updating package lists...", "[OK] Packages updated successfully.", "[INFO] Installing necessary dependencies (curl, socat)...", "[OK] Dependencies installed.", "[INFO] Downloading latest X-UI panel version...", "[OK] Download complete.", "[INFO] Installing X-UI panel...", "[INFO] Setting default credentials (admin/admin) and port (2053)...", "[SUCCESS] X-UI panel installed successfully!", "[INFO] To manage the panel, run 'x-ui' command.", "[INFO] You can now access the panel at: http://YOUR_SERVER_IP:2053"],
                 "tutorial-title": "Step-by-Step Installation Guide",
                 "step1-title": "Step 1: Get a Server", "step1-desc": "Get a Virtual Private Server (VPS) with Debian or Ubuntu OS. Minimum specs: 1 CPU Core, 512MB RAM.",
@@ -269,6 +266,8 @@
                 if(t[el.dataset.translate]) el.innerHTML = t[el.dataset.translate];
             });
             
+            ui.heroCommandContainer.innerHTML = `$ <span>bash &lt;(curl -Ls https://raw.githubusercontent.com/MR-Amoori/Complete_installation_of_X-UI_panel/master/install.sh)</span>`;
+            
             ui.featuresGrid.innerHTML = [
                 templates.card('plugs', 'feature1-title', 'feature1-desc', t),
                 templates.card('gauge', 'feature2-title', 'feature2-desc', t, 'lg:!mt-8'),
@@ -318,9 +317,10 @@
         }
 
         function handleCopyClick(e) {
-            const copyBtn = e.target.closest('.copy-btn');
+            const copyBtn = e.target.closest('.copy-btn, #hero-copy-btn');
             if (!copyBtn) return;
-            const commandText = copyBtn.closest('.relative').querySelector('code').textContent.trim().replace('...', 'https://raw.githubusercontent.com/MR-Amoori/Complete_installation_of_X-UI_panel/master/install.sh');
+            const container = copyBtn.closest('.relative');
+            const commandText = container.querySelector('code, #hero-command-container').textContent.trim().replace('...', 'https://raw.githubusercontent.com/MR-Amoori/Complete_installation_of_X-UI_panel/master/install.sh').replace('$ ', '');
             navigator.clipboard.writeText(commandText).then(() => showToast(translations[currentLang]['copy-success'], 'success')).catch(() => showToast(translations[currentLang]['copy-error'], 'error'));
         }
 
@@ -330,7 +330,7 @@
             const button = isHero ? null : ui.runSimBtn;
 
             if (isHero) {
-                clearTimeout(heroSimTimeout);
+                if (ui.heroSimTimeout) clearTimeout(ui.heroSimTimeout);
             } else {
                  if (isSimRunning) return;
                 isSimRunning = true;
@@ -338,6 +338,7 @@
                 button.classList.add('opacity-50', 'cursor-not-allowed');
             }
            
+            if(!termOutput) return; // Guard clause
             termOutput.innerHTML = '';
             let i = 0;
 
@@ -349,7 +350,7 @@
                         button.disabled = false;
                         button.classList.remove('opacity-50', 'cursor-not-allowed');
                     } else {
-                         heroSimTimeout = setTimeout(() => runTerminalSimulation(true), 5000);
+                         ui.heroSimTimeout = setTimeout(() => runTerminalSimulation(true), 5000);
                     }
                     return;
                 }
@@ -413,13 +414,14 @@
                 allSections: document.querySelectorAll('main > section'),
                 terminalOutput: document.getElementById('terminal-output'),
                 heroTerminalOutput: document.getElementById('hero-terminal-output'),
-                runSimBtn: document.getElementById('run-simulation-btn')
+                runSimBtn: document.getElementById('run-simulation-btn'),
+                heroCommandContainer: document.getElementById('hero-command-container'),
             });
 
             ui.langFaBtn.addEventListener('click', () => setLanguage('fa'));
             ui.langEnBtn.addEventListener('click', () => setLanguage('en'));
             document.body.addEventListener('click', handleCopyClick);
-            ui.runSimBtn.addEventListener('click', () => runTerminalSimulation(false));
+            ui.runSimBtn.addEventListener('click', () => runTerminalSimulation(false, translations[currentLang]['sim-logs']));
             
             setLanguage('fa');
             
