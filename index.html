@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پورتال جامع پنل X-UI | X-UI Panel Portal</title>
     <link rel="icon" href="https://mramoori.ir/images/Avatar.jpg" type="image/x-icon">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -31,12 +31,31 @@
         .bg-pattern { background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0); background-size: 30px 30px; }
         .font-fa { font-family: var(--font-fa); }
         .font-en { font-family: var(--font-en); }
-        .glass-card { background: rgba(22, 27, 34, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .glass-card { 
+            background: rgba(22, 27, 34, 0.75); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
         .glass-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
-        .fade-in-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
-        .nav-link { position: relative; transition: color 0.3s; }
-        .nav-link.active, .nav-link:hover { color: var(--color-primary); }
+        /* حذف انیمیشن‌های اسکرول محور */
+        .fade-in-up { 
+            opacity: 1;
+            transform: none;
+            transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease; 
+        }
+        .nav-link { 
+            position: relative; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+        }
+        .nav-link.active, .nav-link:hover { 
+            color: var(--color-primary);
+            background: rgba(35, 134, 54, 0.1);
+        }
         .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--color-primary); transition: width .3s; }
         .nav-link.active::after { width: 60%; }
         details summary::-webkit-details-marker { display: none; }
@@ -64,7 +83,13 @@
                 <a href="#security" class="nav-link" data-nav-id="security" data-translate="nav-security"></a>
                 <a href="#faq" class="nav-link" data-nav-id="faq" data-translate="nav-faq"></a>
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center gap-4">
+                 <a href="https://github.com/MR-Amoori" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="GitHub Profile">
+                    <i class="ph-github-logo text-2xl"></i>
+                </a>
+                <a href="https://mramoori.ir" target="_blank" class="text-gray-400 hover:text-white transition-colors ml-2" title="Personal Website">
+                    <i class="ph-globe-hemisphere-east text-2xl"></i>
+                </a>
                 <div class="flex space-x-1 md:space-x-2 space-x-reverse rounded-lg border border-gray-700 p-1">
                     <button id="lang-en" class="px-3 py-1 text-xs rounded-md transition-colors" data-lang="en">EN</button>
                     <button id="lang-fa" class="px-3 py-1 text-xs rounded-md transition-colors" data-lang="fa">FA</button>
@@ -85,13 +110,12 @@
                 <div class="mt-10 max-w-2xl mx-auto">
                     <p class="text-sm font-semibold text-gray-400 mb-2" data-translate="hero-command-prompt"></p>
                     <div class="relative">
-                        <div id="hero-command-container" class="bg-black text-left p-4 pr-16 md:pr-20 rounded-lg font-mono text-slate-300 text-sm sm:text-base overflow-x-auto">
-                            <!-- Command text will be inserted here -->
-                        </div>
-                        <button id="hero-copy-btn" class="absolute top-1/2 -translate-y-1/2 right-3 rtl:right-auto rtl:left-3 bg-slate-700 text-slate-300 hover:bg-slate-600 p-2 rounded-md">
-                            <i class="ph-copy text-xl"></i>
-                        </button>
-                    </div>
+    <button id="hero-copy-btn" class="absolute -top-5 right-3 rtl:right-auto rtl:left-3 bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-light)] shadow-lg p-2 rounded-full z-10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-primary)]" title="کپی کن">
+        <i class="ph-copy text-2xl"></i>
+    </button>
+    <div id="hero-command-container" class="bg-black text-left p-4 rounded-lg font-mono text-slate-300 text-sm sm:text-base overflow-x-auto">
+    </div>
+</div>
                 </div>
 
             </div>
@@ -241,7 +265,6 @@
         const ui = {};
         let currentLang = null;
         let isSimRunning = false;
-        let heroSimTimeout;
         
         const templates = {
             card: (icon, titleKey, descKey, t, extraClasses = '') => `<div class="glass-card p-6 rounded-xl text-center fade-in-up ${extraClasses}"><i class="ph-${icon} text-5xl text-[var(--color-primary)] mb-4 inline-block"></i><h3 class="text-xl font-bold mb-2">${t[titleKey]}</h3><p class="text-gray-400 text-sm">${t[descKey]}</p></div>`,
@@ -252,19 +275,37 @@
         
         function setLanguage(lang) {
             if (lang === currentLang) return;
+            
+            // ذخیره زبان انتخابی
+            localStorage.setItem('preferredLang', lang);
             currentLang = lang;
-            const t = translations[currentLang];
-
+            const t = translations[lang];
+            
+            // اعمال تغییرات ظاهری
             document.documentElement.lang = lang;
-            document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
-            document.body.classList.toggle('font-fa', lang === 'fa');
-            document.body.classList.toggle('font-en', lang === 'en');
-            ui.langFaBtn.classList.toggle('bg-[var(--color-primary)]', lang === 'fa');
-            ui.langEnBtn.classList.toggle('bg-[var(--color-primary)]', lang === 'en');
-
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                if(t[el.dataset.translate]) el.innerHTML = t[el.dataset.translate];
+            const isRTL = lang === 'fa';
+            document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            document.body.classList.toggle('font-fa', isRTL);
+            document.body.classList.toggle('font-en', !isRTL);
+            
+            // به‌روزرسانی دکمه‌های زبان
+            document.querySelectorAll('[data-lang]').forEach(btn => {
+                const isActive = btn.dataset.lang === lang;
+                btn.classList.toggle('bg-[var(--color-primary)]', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('text-gray-400', !isActive);
             });
+            
+            // به‌روزرسانی متن‌های ترجمه شده
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (t[key]) {
+                    el.innerHTML = t[key];
+                }
+            });
+            
+            // به‌روزرسانی محتوای پویا
+            updateDynamicContent();
             
             ui.heroCommandContainer.innerHTML = `$ <span>bash &lt;(curl -Ls https://raw.githubusercontent.com/MR-Amoori/Complete_installation_of_X-UI_panel/master/install.sh)</span>`;
             
@@ -311,9 +352,7 @@
             ].join('');
             
             const footerLinkText = currentLang === 'fa' ? 'محمدرضا عموری' : 'Mohammadreza Amoori';
-            ui.footerText.innerHTML = `${t["footer-text"]} <a href="https://github.com/MR-Amoori" target="_blank" class="font-semibold text-[var(--color-primary)] hover:underline">${footerLinkText}</a>`;
-            
-            runTerminalSimulation(true);
+            ui.footerText.innerHTML = `${t["footer-text"]} <a href="https://mramoori.ir/" target="_blank" class="font-semibold text-[var(--color-primary)] hover:underline">${footerLinkText}</a>`;
         }
 
         function handleCopyClick(e) {
@@ -326,6 +365,8 @@
 
         function runTerminalSimulation(isHero = false) {
             const termOutput = isHero ? ui.heroTerminalOutput : ui.terminalOutput;
+            if(!termOutput) return;
+
             const logs = translations[currentLang][isHero ? 'hero-sim-logs' : 'sim-logs'];
             const button = isHero ? null : ui.runSimBtn;
 
@@ -338,7 +379,6 @@
                 button.classList.add('opacity-50', 'cursor-not-allowed');
             }
            
-            if(!termOutput) return; // Guard clause
             termOutput.innerHTML = '';
             let i = 0;
 
@@ -397,6 +437,68 @@
             });
         }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
 
+        function updateDynamicContent() {
+            if (!ui.featuresGrid || !ui.tutorialContainer || !ui.usageGuideContainer || 
+                !ui.commandsGrid || !ui.securityGrid || !ui.faqContainer) return;
+                
+            const t = translations[currentLang];
+            
+            // به‌روزرسانی ویژگی‌ها
+            ui.featuresGrid.innerHTML = [
+                templates.card('plugs', 'feature1-title', 'feature1-desc', t),
+                templates.card('gauge', 'feature2-title', 'feature2-desc', t, 'lg:!mt-8'),
+                templates.card('chart-bar', 'feature3-title', 'feature3-desc', t),
+                templates.card('gear-six', 'feature4-title', 'feature4-desc', t, 'lg:!mt-8')
+            ].join('');
+
+            // به‌روزرسانی مراحل آموزشی
+            const stepText = currentLang === 'fa' ? 'قدم' : 'Step';
+            ui.tutorialContainer.innerHTML = [
+                templates.tutorialStep('server', `${stepText} 1`, 'step1-title', 'step1-desc', null, t),
+                templates.tutorialStep('ssh', `${stepText} 2`, 'step2-title', 'step2-desc', 'ssh root@YOUR_SERVER_IP', t),
+                templates.tutorialStep('scroll', `${stepText} 3`, 'step3-title', 'step3-desc', 'bash &lt;(curl -Ls ...)', t),
+                templates.tutorialStep('key', `${stepText} 4`, 'step4-title', 'step4-desc', null, t)
+            ].join('');
+
+            // به‌روزرسانی راهنمای استفاده
+            const usageStepNumbers = currentLang === 'fa' ? ['۱', '۲', '۳', '۴'] : ['1', '2', '3', '4'];
+            ui.usageGuideContainer.innerHTML = [
+                templates.tutorialStep('terminal', usageStepNumbers[0], 'usage1-title', 'usage1-desc', 'x-ui', t),
+                templates.tutorialStep('user-gear', usageStepNumbers[1], 'usage2-title', 'usage2-desc', null, t),
+                templates.tutorialStep('info', usageStepNumbers[2], 'usage3-title', 'usage3-desc', null, t),
+                templates.tutorialStep('database', usageStepNumbers[3], 'usage4-title', 'usage4-desc', null, t)
+            ].join('');
+
+            // به‌روزرسانی دستورات
+            ui.commandsGrid.innerHTML = [
+                templates.commandCard('download-simple', 'install-title', 'install-desc', 'bash &lt;(curl -Ls ...)', t),
+                templates.commandCard('list-checks', 'manage-title', 'manage-desc', 'x-ui', t),
+                templates.commandCard('terminal', 'logs-title', 'logs-desc', 'x-ui logs', t),
+                templates.commandCard('arrow-clockwise', 'restart-title', 'restart-desc', 'x-ui restart', t)
+            ].join('');
+            
+            // به‌روزرسانی نکات امنیتی
+            ui.securityGrid.innerHTML = [
+                templates.card('key', 'sec1-title', 'sec1-desc', t),
+                templates.card('fire', 'sec2-title', 'sec2-desc', t),
+                templates.card('cloud-arrow-up', 'sec3-title', 'sec3-desc', t)
+            ].join('');
+
+            // به‌روزرسانی سوالات متداول
+            ui.faqContainer.innerHTML = [
+                templates.faqItem('faq1-q', 'faq1-a', t),
+                templates.faqItem('faq2-q', 'faq2-a', t),
+                templates.faqItem('faq3-q', 'faq3-a', t)
+            ].join('');
+            
+            // به‌روزرسانی فوتر
+            const currentYear = new Date().getFullYear();
+            const linkText = currentLang === 'fa' ? 'محمدرضا عموری' : 'Mohammadreza Amoori';
+            if(ui.footerText) {
+                ui.footerText.innerHTML = `${t['footer-text']} <a href="https://mramoori.ir" target="_blank" class="font-semibold text-[var(--color-primary)] hover:underline">${linkText}</a> ${currentYear}`;
+            }
+        }
+
         function init() {
              Object.assign(ui, {
                 langFaBtn: document.getElementById('lang-fa'),
@@ -413,23 +515,32 @@
                 footerText: document.getElementById('footer-text'),
                 allSections: document.querySelectorAll('main > section'),
                 terminalOutput: document.getElementById('terminal-output'),
-                heroTerminalOutput: document.getElementById('hero-terminal-output'),
+                heroTerminalOutput: document.getElementById('hero-command-container'),
                 runSimBtn: document.getElementById('run-simulation-btn'),
                 heroCommandContainer: document.getElementById('hero-command-container'),
             });
 
+            // تنظیم زبان اولیه بر اساس ترجیح ذخیره شده یا زبان مرورگر
+            const savedLang = localStorage.getItem('preferredLang');
+            const browserLang = navigator.language.startsWith('fa') ? 'fa' : 'en';
+            setLanguage(savedLang || browserLang);
+
+            // افزودن رویدادها
             ui.langFaBtn.addEventListener('click', () => setLanguage('fa'));
             ui.langEnBtn.addEventListener('click', () => setLanguage('en'));
-            document.body.addEventListener('click', handleCopyClick);
-            ui.runSimBtn.addEventListener('click', () => runTerminalSimulation(false, translations[currentLang]['sim-logs']));
+            document.addEventListener('click', handleCopyClick);
             
-            setLanguage('fa');
+            if(ui.runSimBtn) {
+                ui.runSimBtn.addEventListener('click', () => runTerminalSimulation(false));
+            }
+
+            // راه‌اندازی شبیه‌ساز ترمینال در بخش هیرو
+            if(ui.heroTerminalOutput) {
+                runTerminalSimulation(true);
+            }
             
-            document.querySelectorAll('.section-title').forEach(h => h.classList.add('text-3xl', 'font-bold', 'text-center', 'mb-12', 'fade-in-up'));
-            document.querySelectorAll('.fade-in-up').forEach(el => animationObserver.observe(el));
-            ui.allSections.forEach(section => {
-                if(section) navObserver.observe(section);
-            });
+            // به‌روزرسانی محتوای پویا
+            updateDynamicContent();
         }
         
         document.addEventListener('DOMContentLoaded', init);
