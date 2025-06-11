@@ -412,7 +412,19 @@
             typeLine();
         }
 
+        function updateHeroCommand() {
+            if (!ui.heroCommandContainer) return;
+            const t = translations[currentLang];
+            const command = 'bash <(curl -Ls https://raw.githubusercontent.com/MR-Amoori/Complete_installation_of_X-UI_panel/main/install.sh) --iran';
+            ui.heroCommandContainer.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <code class="text-green-400 select-all">${command}</code>
+                </div>
+            `;
+        }
+
         function showToast(message, type) {
+            if (!ui.toast || !ui.toastMessage) return;
             ui.toastMessage.textContent = message;
             ui.toast.className = `fixed bottom-5 right-5 text-white py-3 px-5 rounded-lg shadow-lg transition-all duration-300 transform translate-x-0 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
             setTimeout(() => ui.toast.classList.add('translate-x-[calc(100%+20px)]'), 3000);
@@ -520,15 +532,17 @@
                 heroCommandContainer: document.getElementById('hero-command-container'),
             });
 
-            // تنظیم زبان اولیه بر اساس ترجیح ذخیره شده یا زبان مرورگر
+            // تنظیم زبان اولیه به فارسی به عنوان پیش‌فرض
             const savedLang = localStorage.getItem('preferredLang');
-            const browserLang = navigator.language.startsWith('fa') ? 'fa' : 'en';
-            setLanguage(savedLang || browserLang);
+            setLanguage(savedLang || 'fa');
 
             // افزودن رویدادها
             ui.langFaBtn.addEventListener('click', () => setLanguage('fa'));
             ui.langEnBtn.addEventListener('click', () => setLanguage('en'));
             document.addEventListener('click', handleCopyClick);
+            
+            // نمایش محتوای بلاک دستور در هیرو
+            updateHeroCommand();
             
             if(ui.runSimBtn) {
                 ui.runSimBtn.addEventListener('click', () => runTerminalSimulation(false));
