@@ -1,4 +1,7 @@
 # Complete installation of X-UI panel
+------------
+- [⭐ View preview web page ⭐](https://mr-amoori.github.io/Complete_installation_of_X-UI_panel/)
+------------
 - [How to fully install the XUI panel.](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#install-x-ui-panel "How to fully install the XUI panel.")
 - [Get an SSL certificate for the domain.](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#download-and-install-the-acme-script-for-getting-a-free-ssl-certificate "Get an SSL certificate for the domain.")
 - [Install Google BBR.](https://github.com/MR-Amoori/Complete_installation_of_X-UI_panel/blob/Master/README.md#install-google-bbr "Install Google BBR.")
