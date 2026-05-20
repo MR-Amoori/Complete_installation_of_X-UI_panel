@@ -289,4 +289,4 @@ nano wp-config.php
 https://server-ip-address-or-domain/wordpress
 ```
 
-
+###### Updating... (Coming soon!)
